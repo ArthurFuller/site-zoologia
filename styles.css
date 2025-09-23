@@ -224,22 +224,24 @@ body {
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: 1rem;
+    gap: 0.8rem;
     margin: 0;
     padding: 0;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
 }
 
 .nav-link {
     color: white;
     text-decoration: none;
     font-weight: 500;
-    padding: 0.4rem 0.6rem;
+    padding: 0.3rem 0.5rem;
     border-radius: 6px;
     transition: all 0.3s ease;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     white-space: nowrap;
+    line-height: 1.2;
 }
 
 .nav-link:hover {
@@ -726,21 +728,31 @@ body {
         position: fixed;
         left: -100%;
         top: 120px;
-        bottom: 0;
+        height: calc(100vh - 120px);
         flex-direction: column;
         background-color: #667eea;
-        width: 100%;
+        width: 100vw;
         text-align: center;
-        transition: 0.3s;
+        transition: left 0.3s ease;
         box-shadow: 0 10px 27px rgba(0,0,0,0.05);
-        padding: 1.5rem 0;
+        padding: 2rem 1rem;
         z-index: 999;
         overflow-y: auto;
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        justify-content: flex-start;
+        gap: 0.5rem;
     }
 
     .nav-menu.active {
         left: 0;
+    }
+    
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
     }
 
     .nav-toggle {

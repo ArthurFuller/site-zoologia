@@ -1,0 +1,53 @@
+# GitHub Pages Configuration
+title: "Resumo Zoologia"
+description: "Site  sobre Zoologia, quiz interativo"
+url: "https://arthurfuller.github.io"
+baseurl: "/site-zoologia"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# SEO settings
+lang: pt-BR
+author: ArthurFuller
+
+# Social links
+github_username: ArthurFuller
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - DEPLOY_INSTRUCTIONS.md
+  - TODO.md
+  - Relatorio_Verificacao_Site.md
+  - Resumo_Completo_Zoologia_Prova.md
+  - "*.backup"
+  - "*.tmp"
+  - "*.temp"
+
+# Include files
+include:
+  - _pages
+  - assets
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"

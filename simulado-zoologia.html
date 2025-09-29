@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Completo - Zoologia I</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .simulado-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .simulado-info {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 20px var(--shadow-light);
+        }
+        .question-counter {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .simulado-question {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .question-options {
+            list-style: none;
+            padding: 0;
+        }
+        .question-options li {
+            background: var(--bg-tertiary);
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .question-options li:hover {
+            border-color: #667eea;
+            background: var(--bg-primary);
+        }
+        .results-section {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 20px var(--shadow-light);
+            text-align: center;
+        }
+        .score-display {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin: 1rem 0;
+        }
+        
+        /* Estilos responsivos para mobile */
+        @media (max-width: 768px) {
+            .simulado-header {
+                padding: 2rem 0;
+            }
+            
+            .simulado-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .simulado-header p {
+                font-size: 0.9rem;
+            }
+            
+            .simulado-header .container > div {
+                flex-direction: column;
+                gap: 1rem;
+                margin-bottom: 1rem !important;
+            }
+            
+            .simulado-info {
+                padding: 1.5rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .simulado-question {
+                padding: 1.5rem;
+            }
+            
+            .question-title {
+                font-size: 1.1rem;
+            }
+            
+            .question-options li {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+            
+            .question-counter {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+            
+            .score-display {
+                font-size: 1.5rem;
+            }
+            
+            .results-section {
+                padding: 1.5rem;
+                text-align: left;
+            }
+            
+            .results-section h2 {
+                text-align: center;
+                font-size: 1.5rem;
+            }
+            
+            .results-section h3 {
+                font-size: 1.2rem;
+            }
+            
+            #detailedReview {
+                text-align: left;
+            }
+            
+            #questionReviewList > div {
+                padding: 1rem !important;
+                margin: 0.75rem 0 !important;
+            }
+            
+            #questionReviewList > div > div:first-child {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 0.5rem;
+            }
+            
+            #questionReviewList > div > div:first-child > div:first-child {
+                margin-right: 0 !important;
+                margin-bottom: 0.5rem;
+            }
+            
+            .quiz-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+                margin: 0.5rem;
+            }
+            
+            .container > div:last-child {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .container > div:last-child .quiz-btn {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .simulado-header {
+                padding: 1.5rem 0;
+            }
+            
+            .simulado-header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .simulado-info {
+                padding: 1rem;
+            }
+            
+            .simulado-question {
+                padding: 1rem;
+            }
+            
+            .question-title {
+                font-size: 1rem;
+            }
+            
+            .question-options li {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+            
+            .score-display {
+                font-size: 1.3rem;
+            }
+            
+            .results-section {
+                padding: 1rem;
+            }
+            
+            #questionReviewList > div {
+                padding: 0.75rem !important;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="simulado-header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <a href="index.html" class="quiz-btn secondary" style="text-decoration: none;">
+                    <i class="fas fa-home"></i> Voltar ao Site
+                </a>
+                <button id="themeToggle" class="theme-toggle" title="Alternar modo escuro" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 0.75rem; border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <h1><i class="fas fa-clipboard-list"></i> Simulado Completo de Zoologia I</h1>
+            <p>Teste completo com 60 questões sobre a matéria de Zoologia </p>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Informações do Simulado -->
+            <div class="simulado-info">
+                <h2><i class="fas fa-info-circle"></i> Informações do Simulado</h2>
+                <div class="cards-grid">
+                    <div class="info-card">
+                        <h3>Estrutura do Simulado</h3>
+                        <ul>
+                            <li><strong>60 questões</strong> de múltipla escolha</li>
+                            <li><strong>Cobertura:</strong> Todo o conteúdo de Chordata</li>
+                            <li><strong>Níveis:</strong> Básico, Intermediário e Avançado</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>Distribuição das Questões</h3>
+                        <ul>
+                            <li><strong>Filo Chordata:</strong> 6 questões</li>
+                            <li><strong>Urochordata:</strong> 6 questões</li>
+                            <li><strong>Cephalochordata:</strong> 6 questões</li>
+                            <li><strong>Agnatha:</strong> 6 questões</li>
+                            <li><strong>Chondrichthyes:</strong> 6 questões</li>
+                            <li><strong>Osteichthyes:</strong> 6 questões</li>
+                            <li><strong>Amphibia:</strong> 6 questões</li>
+                            <li><strong>Reptilia:</strong> 6 questões</li>
+                            <li><strong>Aves:</strong> 6 questões</li>
+                            <li><strong>Mammalia:</strong> 6 questões</li>
+                        </ul>
+                        <p style="margin-top: 1rem; font-weight: 600; color: #667eea;">Total: 60 questões</p>
+                    </div>
+                </div>
+                <button id="startSimulado" class="quiz-btn primary" style="margin: 2rem auto; display: block; padding: 1rem 2rem; font-size: 1.1rem;">
+                    <i class="fas fa-play"></i> Iniciar Simulado
+                </button>
+            </div>
+
+            <!-- Área do Simulado -->
+            <div id="simuladoArea" style="display: none;">
+                <div class="question-counter" id="questionCounter">
+                    Questão 1 de 50
+                </div>
+                
+                <div class="simulado-question" id="currentQuestion">
+                    <!-- Questão será inserida aqui dinamicamente -->
+                </div>
+
+                <div style="text-align: center; margin: 2rem 0;">
+                    <button id="prevQuestion" class="quiz-btn secondary" style="margin-right: 1rem;">
+                        <i class="fas fa-arrow-left"></i> Anterior
+                    </button>
+                    <button id="nextQuestion" class="quiz-btn primary">
+                        Próxima <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button id="finishSimulado" class="quiz-btn primary" style="display: none;">
+                        <i class="fas fa-flag-checkered"></i> Finalizar Simulado
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resultados -->
+            <div id="simuladoResults" class="results-section" style="display: none;">
+                <h2><i class="fas fa-chart-bar"></i> Resultados do Simulado</h2>
+                <div class="score-display" id="finalScore">0/60</div>
+                <div id="performanceBreakdown"></div>
+                
+                <!-- Revisão Detalhada das Questões -->
+                <div id="detailedReview" style="margin-top: 2rem;">
+                    <h3><i class="fas fa-list-alt"></i> Revisão Detalhada das Questões</h3>
+                    <div id="questionReviewList"></div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button id="restartSimulado" class="quiz-btn primary" style="margin-right: 1rem;">
+                        <i class="fas fa-redo"></i> Refazer Simulado
+                    </button>
+                    <a href="index.html" class="quiz-btn secondary" style="text-decoration: none;">
+                        <i class="fas fa-home"></i> Voltar ao Site
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Banco de questões completo do simulado
+        const simuladoQuestions = [
+            // FILO CHORDATA (6 questões)
+            {
+                category: "Filo Chordata",
+                question: "Quantas espécies de cordados são conhecidas atualmente?",
+                options: ["46.200 espécies", "42.500 espécies", "50.000 espécies", "38.900 espécies"],
+                correct: 0,
+                explanation: "O Filo Chordata possui 46.200 espécies conhecidas, distribuídas em três subfilos principais."
+            },
+            {
+                category: "Filo Chordata",
+                question: "Quais são as quatro características básicas que definem todos os cordados?",
+                options: [
+                    "Esqueleto, sistema nervoso, brânquias, nadadeiras",
+                    "Notocorda, tubo neural oco, fendas faríngeas, cauda pós-anal",
+                    "Crânio, coluna vertebral, mandíbulas, membros",
+                    "Simetria bilateral, celoma, metameria, deuterostomia"
+                ],
+                correct: 1,
+                explanation: "As quatro características diagnósticas são fundamentais para definir os cordados."
+            },
+            {
+                category: "Filo Chordata",
+                question: "Qual é o tipo de simetria dos cordados?",
+                options: ["Radial", "Assimétrica", "Bilateral", "Esférica"],
+                correct: 2,
+                explanation: "Os cordados possuem simetria bilateral, característica dos deuterostômios."
+            },
+            {
+                category: "Filo Chordata",
+                question: "Os cordados são classificados como:",
+                options: ["Protostômios", "Acelomados", "Pseudocelomados", "Deuterostômios"],
+                correct: 3,
+                explanation: "Os cordados são deuterostômios, onde o blastóporo origina o ânus."
+            },
+            {
+                category: "Filo Chordata",
+                question: "Qual a função principal da notocorda?",
+                options: ["Suporte esquelético", "Digestão", "Respiração", "Reprodução"],
+                correct: 0,
+                explanation: "A notocorda é um bastão esquelético dorsal, elástico e incompressível."
+            },
+            {
+                category: "Filo Chordata",
+                question: "O tubo neural oco dos cordados está localizado:",
+                options: ["Ventralmente", "Dorsalmente à notocorda", "Lateralmente", "Anteriormente"],
+                correct: 1,
+                explanation: "O tubo neural oco corre dorsalmente à notocorda, formando o sistema nervoso central."
+            },
+
+            // UROCHORDATA (6 questões)
+            {
+                category: "Urochordata",
+                question: "Quantas espécies de tunicados existem no Brasil?",
+                options: ["146 espécies", "46 espécies", "246 espécies", "346 espécies"],
+                correct: 0,
+                explanation: "O Brasil possui 146 espécies de tunicados do total de 3.710 espécies mundiais."
+            },
+            {
+                category: "Urochordata",
+                question: "Quando os tunicados apresentam características de cordados?",
+                options: ["Apenas no adulto", "Durante toda vida", "Apenas na larva", "Nunca"],
+                correct: 2,
+                explanation: "Os tunicados apresentam características de cordados apenas nos estágios larvais."
+            },
+            {
+                category: "Urochordata",
+                question: "Qual classe de tunicados inclui as ascídias?",
+                options: ["Thaliacea", "Larvacea", "Sorberacea", "Ascidiacea"],
+                correct: 3,
+                explanation: "A classe Ascidiacea inclui as ascídias, que são sésseis e filtradoras."
+            },
+            {
+                category: "Urochordata",
+                question: "Quantos litros de água por hora uma ascídia pode filtrar?",
+                options: ["2-3 litros", "1-2 litros", "4-5 litros", "6-7 litros"],
+                correct: 0,
+                explanation: "As ascídias filtram 2-3 litros de água por hora, purificando o ambiente marinho."
+            },
+            {
+                category: "Urochordata",
+                question: "Qual classe de tunicados inclui as salpas?",
+                options: ["Ascidiacea", "Thaliacea", "Larvacea", "Sorberacea"],
+                correct: 1,
+                explanation: "A classe Thaliacea inclui as salpas, que são planctônicas com túnicas gelatinosas."
+            },
+            {
+                category: "Urochordata",
+                question: "Os tunicados são:",
+                options: ["Dióicos", "Assexuados", "Hermafroditas simultâneos", "Partenogenéticos"],
+                correct: 2,
+                explanation: "Os tunicados são hermafroditas simultâneos, possuindo gônadas masculinas e femininas."
+            },
+
+            // CEPHALOCHORDATA (6 questões)
+            {
+                category: "Cephalochordata",
+                question: "Quantas espécies de anfioxos existem no Brasil?",
+                options: ["1 espécie", "3 espécies", "2 espécies", "4 espécies"],
+                correct: 2,
+                explanation: "O Brasil possui 2 espécies de anfioxos do total de ~30 espécies mundiais."
+            },
+            {
+                category: "Cephalochordata",
+                question: "Quantos cirros orais possuem os anfioxos?",
+                options: ["8 cirros", "10 cirros", "15 cirros", "12 cirros"],
+                correct: 3,
+                explanation: "Os anfioxos possuem 12 cirros orais que auxiliam na captura de alimento."
+            },
+            {
+                category: "Cephalochordata",
+                question: "Qual o comprimento típico dos anfioxos?",
+                options: ["5-15 cm", "2-8 cm", "10-20 cm", "15-25 cm"],
+                correct: 0,
+                explanation: "Os anfioxos medem entre 5-15 cm de comprimento e têm corpo comprimido lateralmente."
+            },
+            {
+                category: "Cephalochordata",
+                question: "Os anfioxos são:",
+                options: ["Hermafroditas", "Dióicos", "Assexuados", "Partenogenéticos"],
+                correct: 1,
+                explanation: "Os anfioxos são dióicos com fecundação externa e desenvolvimento indireto."
+            },
+            {
+                category: "Cephalochordata",
+                question: "Quantas fendas faríngeas possuem os anfioxos?",
+                options: ["50 fendas", "100 fendas", "200 fendas", "300 fendas"],
+                correct: 2,
+                explanation: "Os anfioxos possuem aproximadamente 200 fendas faríngeas verticais oblíquas."
+            },
+            {
+                category: "Cephalochordata",
+                question: "Qual estrutura dos anfioxos é responsável pela filtração?",
+                options: ["Cirros orais", "Notocorda", "Tubo neural", "Órgão da roda"],
+                correct: 3,
+                explanation: "O órgão da roda é responsável pela filtração e captura de alimento nos anfioxos."
+            },
+
+            // AGNATHA (6 questões)
+            {
+                category: "Agnatha",
+                question: "Quantas espécies de peixes-bruxa existem no Brasil?",
+                options: ["3 espécies", "1 espécie", "5 espécies", "7 espécies"],
+                correct: 0,
+                explanation: "O Brasil possui 3 espécies de peixes-bruxa do total de 45 espécies mundiais."
+            },
+            {
+                category: "Agnatha",
+                question: "Onde estão localizadas as narinas dos peixes-bruxa?",
+                options: ["Topo da cabeça", "Extremidade do focinho", "Laterais da cabeça", "Base da cabeça"],
+                correct: 1,
+                explanation: "Os peixes-bruxa possuem narinas na extremidade do focinho, diferente das lampréias."
+            },
+            {
+                category: "Agnatha",
+                question: "Qual é o hábito alimentar das lampréias adultas?",
+                options: ["Filtrador", "Herbívoro", "Ectoparasita hematófago", "Carnívoro"],
+                correct: 2,
+                explanation: "As lampréias adultas são ectoparasitas hematófagas, sugando sangue de peixes."
+            },
+            {
+                category: "Agnatha",
+                question: "Como é chamada a larva das lampréias?",
+                options: ["Girino", "Náuplio", "Zoea", "Amocete"],
+                correct: 3,
+                explanation: "A larva das lampréias é chamada amocete e é dulcícola e micrófaga."
+            },
+            {
+                category: "Agnatha",
+                question: "Qual o comprimento máximo que podem atingir os agnatos?",
+                options: ["1 metro", "50 cm", "1,5 metros", "2 metros"],
+                correct: 0,
+                explanation: "Tanto peixes-bruxa quanto lampréias podem atingir até 1 metro de comprimento."
+            },
+            {
+                category: "Agnatha",
+                question: "Os peixes-bruxa são:",
+                options: ["Parasitas", "Necrófagos", "Filtradores", "Herbívoros"],
+                correct: 1,
+                explanation: "Os peixes-bruxa são necrófagos, alimentando-se de poliquetos, moluscos e peixes mortos."
+            },
+
+            // CHONDRICHTHYES (6 questões)
+            {
+                category: "Chondrichthyes",
+                question: "Quantas espécies marinhas de Chondrichthyes existem no Brasil?",
+                options: ["127 espécies", "147 espécies", "137 espécies", "157 espécies"],
+                correct: 2,
+                explanation: "O Brasil possui 137 espécies marinhas de Chondrichthyes, além de 13 dulcícolas."
+            },
+            {
+                category: "Chondrichthyes",
+                question: "Qual tipo de escama caracteriza os Chondrichthyes?",
+                options: ["Ganóides", "Elasmóides", "Cosmóides", "Placóides"],
+                correct: 3,
+                explanation: "Os Chondrichthyes possuem escamas placóides ou podem ser desprovidos de escamas."
+            },
+            {
+                category: "Chondrichthyes",
+                question: "Como é o tipo de fecundação nos Chondrichthyes?",
+                options: ["Interna", "Externa", "Assexuada", "Partenogenética"],
+                correct: 0,
+                explanation: "Os Chondrichthyes possuem fecundação interna através de cláspers nos machos."
+            },
+            {
+                category: "Chondrichthyes",
+                question: "Quantas espécies possui a subclasse Holocephali?",
+                options: ["30 espécies", "50 espécies", "70 espécies", "90 espécies"],
+                correct: 1,
+                explanation: "A subclasse Holocephali (quimeras) possui 50 espécies, todas bentônicas e marinhas."
+            },
+            {
+                category: "Chondrichthyes",
+                question: "Qual a principal diferença entre tubarões e raias quanto às fendas branquiais?",
+                options: [
+                    "Número diferente de fendas",
+                    "Apenas o tamanho",
+                    "Tubarões laterais, raias ventrais",
+                    "Não há diferença"
+                ],
+                correct: 2,
+                explanation: "Tubarões possuem fendas branquiais laterais na cabeça, raias possuem na superfície ventral."
+            },
+            {
+                category: "Chondrichthyes",
+                question: "Qual o comprimento máximo que um tubarão pode atingir?",
+                options: ["12 metros", "15 metros", "20 metros", "18 metros"],
+                correct: 3,
+                explanation: "Os tubarões podem atingir até 18 metros de comprimento (tubarão-baleia)."
+            },
+
+            // OSTEICHTHYES (6 questões)
+            {
+                category: "Osteichthyes",
+                question: "Quantas espécies possui a subclasse Actinopterygii?",
+                options: ["23.681 espécies", "20.681 espécies", "26.681 espécies", "29.681 espécies"],
+                correct: 0,
+                explanation: "A subclasse Actinopterygii (nadadeiras raiadas) possui 23.681 espécies."
+            },
+            {
+                category: "Osteichthyes",
+                question: "Qual característica diferencia as nadadeiras dos Sarcopterygii?",
+                options: ["São raiadas", "Possuem lobos carnosos", "São membranosas", "São cartilaginosas"],
+                correct: 1,
+                explanation: "Os Sarcopterygii possuem nadadeiras lobadas com eixo central ósseo."
+            },
+            {
+                category: "Osteichthyes",
+                question: "Qual peixe pulmonado é encontrado na América do Sul?",
+                options: ["Neoceratodus", "Protopterus", "Lepidosiren", "Latimeria"],
+                correct: 2,
+                explanation: "Lepidosiren (pirambóia) é o peixe pulmonado encontrado na América do Sul."
+            },
+            {
+                category: "Osteichthyes",
+                question: "Por quanto tempo os peixes pulmonados podem estivar?",
+                options: ["2 meses", "4 meses", "8 meses", "6 meses"],
+                correct: 3,
+                explanation: "Os peixes pulmonados podem estivar até 6 meses durante períodos secos."
+            },
+            {
+                category: "Osteichthyes",
+                question: "Onde são encontrados os celacantos atualmente?",
+                options: ["Ilhas Comores/Madagascar", "Austrália", "Brasil", "Japão"],
+                correct: 0,
+                explanation: "Os celacantos (Latimeria) são encontrados nas Ilhas Comores e Madagascar."
+            },
+            {
+                category: "Osteichthyes",
+                question: "Qual tipo de escama caracteriza os teleósteos?",
+                options: ["Placóides", "Elasmóides", "Ganóides", "Cosmóides"],
+                correct: 1,
+                explanation: "Os teleósteos possuem escamas elasmóides, finas e sem esmalte."
+            },
+
+            // AMPHIBIA (6 questões)
+            {
+                category: "Amphibia",
+                question: "Quantas espécies mundiais de anfíbios existem?",
+                options: ["3.222 espécies", "5.222 espécies", "4.222 espécies", "6.222 espécies"],
+                correct: 2,
+                explanation: "Existem 4.222 espécies de anfíbios mundiais, sendo 517 no Brasil."
+            },
+            {
+                category: "Amphibia",
+                question: "Quantos dedos possuem as patas anteriores dos anfíbios?",
+                options: ["4 dedos", "3 dedos", "5 dedos", "6 dedos"],
+                correct: 0,
+                explanation: "Os anfíbios possuem 4 dedos nas patas anteriores e 5 nas posteriores."
+            },
+            {
+                category: "Amphibia",
+                question: "Qual ordem de anfíbios possui o maior número de espécies?",
+                options: ["Urodela", "Anura", "Gymnophiona", "Todas iguais"],
+                correct: 1,
+                explanation: "A ordem Anura (sapos, rãs, pererecas) possui 3.750 espécies."
+            },
+            {
+                category: "Amphibia",
+                question: "Qual característica distingue as pererecas dos outros anuros?",
+                options: ["Tamanho maior", "Pernas curtas", "Discos adesivos", "Cor diferente"],
+                correct: 2,
+                explanation: "As pererecas possuem discos adesivos nas patas para vida arborícola."
+            },
+            {
+                category: "Amphibia",
+                question: "Como se locomovem as cobras-cegas (Gymnophiona)?",
+                options: ["Saltos", "Ondulações laterais", "Rastejamento", "Movimentos serpentiformes"],
+                correct: 3,
+                explanation: "As cobras-cegas se locomovem através de movimentos serpentiformes."
+            },
+            {
+                category: "Amphibia",
+                question: "Qual é o mecanismo da vocalização dos anuros?",
+                options: ["Vibração das cordas vocais", "Ar dos pulmões para sacos vocais", "Batimento das patas", "Fricção da pele"],
+                correct: 1,
+                explanation: "A vocalização ocorre pela passagem de ar dos pulmões para os sacos vocais."
+            },
+
+            // REPTILIA (6 questões)
+            {
+                category: "Reptilia",
+                question: "Quantas espécies de quelônios existem no Brasil?",
+                options: ["17 espécies", "37 espécies", "27 espécies", "47 espécies"],
+                correct: 2,
+                explanation: "O Brasil possui 27 espécies de quelônios, sendo 5 marinhas."
+            },
+            {
+                category: "Reptilia",
+                question: "A que temperatura nascem fêmeas de quelônios?",
+                options: ["Abaixo de 30°C", "Temperatura não influencia", "Exatamente 32°C", "Acima de 33°C"],
+                correct: 3,
+                explanation: "Temperaturas acima de 33°C geram fêmeas, abaixo de 33°C geram machos."
+            },
+            {
+                category: "Reptilia",
+                question: "Quantas espécies atuais possui a ordem Rhyncocephalia?",
+                options: ["2 espécies", "1 espécie", "3 espécies", "4 espécies"],
+                correct: 0,
+                explanation: "A ordem Rhyncocephalia possui apenas 2 espécies atuais (tuataras)."
+            },
+            {
+                category: "Reptilia",
+                question: "Quantas espécies de serpentes existem no Brasil?",
+                options: ["160 espécies", "260 espécies", "210 espécies", "310 espécies"],
+                correct: 1,
+                explanation: "O Brasil possui 260 espécies de serpentes do total de 2.500 espécies mundiais."
+            },
+            {
+                category: "Reptilia",
+                question: "Qual órgão sensorial é exclusivo das serpentes?",
+                options: ["Fosseta loreal", "Linha lateral", "Órgão de Jacobson", "Ampolas de Lorenzini"],
+                correct: 2,
+                explanation: "O órgão vomeronasal (Jacobson) é um quimiorreceptor que funciona via língua bífida."
+            },
+            {
+                category: "Reptilia",
+                question: "Quantas espécies de crocodilianos existem no Brasil?",
+                options: ["3 espécies", "7 espécies", "9 espécies", "5 espécies"],
+                correct: 3,
+                explanation: "O Brasil possui 5 espécies de crocodilianos do total de 21 espécies mundiais."
+            },
+
+            // AVES (6 questões)
+            {
+                category: "Aves",
+                question: "Quantas espécies mundiais de aves existem?",
+                options: ["8.700 espécies", "10.700 espécies", "9.700 espécies", "11.700 espécies"],
+                correct: 2,
+                explanation: "Existem 9.700 espécies de aves mundiais, sendo 1.677 no Brasil."
+            },
+            {
+                category: "Aves",
+                question: "Qual estrutura das aves é responsável pela vocalização?",
+                options: ["Laringe", "Traqueia", "Pulmões", "Siringe"],
+                correct: 3,
+                explanation: "A siringe, localizada na base da traqueia, é o órgão vocal das aves."
+            },
+            {
+                category: "Aves",
+                question: "Como são chamadas as penas de voo das asas?",
+                options: ["Rêmiges", "Rectrizes", "Plúmulas", "Filoplumas"],
+                correct: 0,
+                explanation: "As rêmiges são as penas de voo das asas, essenciais para a sustentação."
+            },
+            {
+                category: "Aves",
+                question: "Qual é a função das rectrizes?",
+                options: ["Isolamento térmico", "Penas de voo da cauda", "Proteção", "Sensorial"],
+                correct: 1,
+                explanation: "As rectrizes são as penas de voo da cauda, importantes para direção e estabilidade."
+            },
+            {
+                category: "Aves",
+                question: "Qual estrutura óssea suporta os músculos do voo?",
+                options: ["Sinsacro", "Pigóstilo", "Quilha do esterno", "Coracóide"],
+                correct: 2,
+                explanation: "A quilha do esterno é onde se inserem os músculos peitorais responsáveis pelo voo."
+            },
+            {
+                category: "Aves",
+                question: "Qual ave fóssil representa o elo entre répteis e aves?",
+                options: ["Hesperornis", "Ichthyornis", "Confuciusornis", "Archaeopteryx"],
+                correct: 3,
+                explanation: "Archaeopteryx possui características de dinossauros (dentes, garras, cauda longa) e de aves (penas)."
+            },
+
+            // MAMMALIA (6 questões)
+            {
+                category: "Mammalia",
+                question: "Quantas espécies continentais de mamíferos existem no Brasil?",
+                options: ["383 espécies", "583 espécies", "483 espécies", "683 espécies"],
+                correct: 2,
+                explanation: "O Brasil possui 483 espécies continentais de mamíferos, além de 41 marinhas."
+            },
+            {
+                category: "Mammalia",
+                question: "Quantas espécies atuais possui a subclasse Prototheria?",
+                options: ["4 espécies", "8 espécies", "10 espécies", "6 espécies"],
+                correct: 3,
+                explanation: "Prototheria (monotremados) possui apenas 6 espécies atuais: ornitorrinco e equidnas."
+            },
+            {
+                category: "Mammalia",
+                question: "Qual subclasse de mamíferos possui marsúpio?",
+                options: ["Metatheria", "Prototheria", "Eutheria", "Todas"],
+                correct: 0,
+                explanation: "Metatheria (marsupiais) possui marsúpio para desenvolvimento dos filhotes imaturos."
+            },
+            {
+                category: "Mammalia",
+                question: "Qual tipo de pêlo funciona como órgão tátil especializado?",
+                options: ["Cobertura", "Vibrissas", "Lanosos", "Espinhos"],
+                correct: 1,
+                explanation: "As vibrissas são pêlos grossos e inervados que funcionam como órgãos táteis."
+            },
+            {
+                category: "Mammalia",
+                question: "Qual estrutura cefálica dos mamíferos tem renovação anual?",
+                options: ["Cornos verdadeiros", "Ossicones", "Galhadas", "Corno de rinoceronte"],
+                correct: 2,
+                explanation: "As galhadas dos cervídeos são renovadas anualmente pelos machos."
+            },
+            {
+                category: "Mammalia",
+                question: "Qual frequência de ecolocalização usam os morcegos?",
+                options: ["5-15 kHz", "300-500 kHz", "1-5 MHz", "20-200 kHz"],
+                correct: 3,
+                explanation: "Os morcegos usam frequências de 20-200 kHz para ecolocalização."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let simuladoStarted = false;
+
+        // Elementos DOM
+        const startBtn = document.getElementById('startSimulado');
+        const simuladoArea = document.getElementById('simuladoArea');
+        const resultsArea = document.getElementById('simuladoResults');
+        const questionCounter = document.getElementById('questionCounter');
+        const currentQuestionDiv = document.getElementById('currentQuestion');
+        const prevBtn = document.getElementById('prevQuestion');
+        const nextBtn = document.getElementById('nextQuestion');
+        const finishBtn = document.getElementById('finishSimulado');
+        const restartBtn = document.getElementById('restartSimulado');
+
+        // Iniciar simulado
+        startBtn.addEventListener('click', function() {
+            startSimulado();
+        });
+
+        function startSimulado() {
+            simuladoStarted = true;
+            currentQuestionIndex = 0;
+            userAnswers = new Array(simuladoQuestions.length).fill(null);
+            
+            document.querySelector('.simulado-info').style.display = 'none';
+            simuladoArea.style.display = 'block';
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = simuladoQuestions[currentQuestionIndex];
+            
+            // Atualizar contador
+            questionCounter.textContent = `Questão ${currentQuestionIndex + 1} de ${simuladoQuestions.length}`;
+            
+            // Criar HTML da questão
+            currentQuestionDiv.innerHTML = `
+                <div class="question-title">
+                    <strong>${question.category}</strong> - ${question.question}
+                </div>
+                <ul class="question-options">
+                    ${question.options.map((option, index) => `
+                        <li data-answer="${index}" ${userAnswers[currentQuestionIndex] === index ? 'style="border-color: #667eea; background: var(--bg-primary);"' : ''}>
+                            <strong>${String.fromCharCode(65 + index)})</strong> ${option}
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            
+            // Adicionar event listeners
+            const options = currentQuestionDiv.querySelectorAll('.question-options li');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const answerIndex = parseInt(this.dataset.answer);
+                    selectAnswer(answerIndex);
+                });
+            });
+            
+            // Atualizar botões de navegação
+            prevBtn.style.display = currentQuestionIndex > 0 ? 'inline-block' : 'none';
+            nextBtn.style.display = currentQuestionIndex < simuladoQuestions.length - 1 ? 'inline-block' : 'none';
+            finishBtn.style.display = currentQuestionIndex === simuladoQuestions.length - 1 ? 'inline-block' : 'none';
+        }
+
+        function selectAnswer(answerIndex) {
+            userAnswers[currentQuestionIndex] = answerIndex;
+            
+            // Atualizar visual da opção selecionada
+            const options = currentQuestionDiv.querySelectorAll('.question-options li');
+            options.forEach((option, index) => {
+                if (index === answerIndex) {
+                    option.style.borderColor = '#667eea';
+                    option.style.background = 'var(--bg-primary)';
+                } else {
+                    option.style.borderColor = 'transparent';
+                    option.style.background = 'var(--bg-tertiary)';
+                }
+            });
+        }
+
+        // Navegação
+        prevBtn.addEventListener('click', function() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', function() {
+            if (currentQuestionIndex < simuladoQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            }
+        });
+
+        finishBtn.addEventListener('click', function() {
+            showResults();
+        });
+
+        function showResults() {
+            simuladoArea.style.display = 'none';
+            resultsArea.style.display = 'block';
+            
+            // Calcular pontuação
+            let correctAnswers = 0;
+            const categoryStats = {};
+            
+            simuladoQuestions.forEach((question, index) => {
+                const isCorrect = userAnswers[index] === question.correct;
+                if (isCorrect) correctAnswers++;
+                
+                // Estatísticas por categoria
+                if (!categoryStats[question.category]) {
+                    categoryStats[question.category] = { correct: 0, total: 0 };
+                }
+                categoryStats[question.category].total++;
+                if (isCorrect) categoryStats[question.category].correct++;
+            });
+            
+            const percentage = Math.round((correctAnswers / simuladoQuestions.length) * 100);
+            
+            // Mostrar pontuação
+            document.getElementById('finalScore').textContent = `${correctAnswers}/${simuladoQuestions.length} (${percentage}%)`;
+            
+            // Breakdown por categoria
+            const breakdownDiv = document.getElementById('performanceBreakdown');
+            breakdownDiv.innerHTML = '<h3>Desempenho por Categoria:</h3>';
+            
+            Object.entries(categoryStats).forEach(([category, stats]) => {
+                const catPercentage = Math.round((stats.correct / stats.total) * 100);
+                breakdownDiv.innerHTML += `
+                    <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-tertiary); border-radius: 8px;">
+                        <strong>${category}:</strong> ${stats.correct}/${stats.total} (${catPercentage}%)
+                        <div style="background: var(--border-color); height: 8px; border-radius: 4px; margin-top: 0.5rem;">
+                            <div style="background: #667eea; height: 100%; width: ${catPercentage}%; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Feedback geral
+            let feedback = '';
+            if (percentage >= 90) {
+                feedback = '🏆 Perfeito! Você vai arrasar demais, estou orgulhoso de você (receberá mimos em breve 💖)!!!';
+            } else if (percentage >= 80) {
+                feedback = '👏 Muito bom! Com isso você já vai tirar uma nota ótima! Que tal revisar uma última vez? :)';
+            } else if (percentage >= 70) {
+                feedback = '📚 Bom trabalho! Continue estudando para melhorar ainda mais, você consegue!! 💕';
+            } else {
+                feedback = '💪 Continue estudando e revise o material mais um cadin, confio em você!! 💝';
+            }
+            
+            breakdownDiv.innerHTML += `<div style="margin-top: 2rem; padding: 1rem; background: var(--gradient-primary); color: white; border-radius: 8px; text-align: center; font-size: 1.1rem;">${feedback}</div>`;
+            
+            // Mostrar revisão detalhada das questões
+            showDetailedReview();
+        }
+
+        function showDetailedReview() {
+            const reviewList = document.getElementById('questionReviewList');
+            reviewList.innerHTML = '';
+            
+            simuladoQuestions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                const userAnswerText = userAnswer !== null ? question.options[userAnswer] : 'Não respondida';
+                const correctAnswerText = question.options[question.correct];
+                
+                const reviewItem = document.createElement('div');
+                reviewItem.style.cssText = `
+                    background: var(--bg-secondary);
+                    border: 2px solid ${isCorrect ? '#28a745' : '#dc3545'};
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    margin: 1rem 0;
+                    text-align: left;
+                `;
+                
+                reviewItem.innerHTML = `
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <div style="background: ${isCorrect ? '#28a745' : '#dc3545'}; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            <i class="fas ${isCorrect ? 'fa-check' : 'fa-times'}"></i>
+                        </div>
+                        <div>
+                            <strong>Questão ${index + 1}</strong> - ${question.category}
+                            <span style="margin-left: 1rem; padding: 0.25rem 0.5rem; background: ${isCorrect ? '#d4edda' : '#f8d7da'}; color: ${isCorrect ? '#155724' : '#721c24'}; border-radius: 4px; font-size: 0.9rem;">
+                                ${isCorrect ? 'CORRETA' : 'INCORRETA'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Pergunta:</strong> ${question.question}
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="margin-bottom: 0.5rem;">
+                            <strong style="color: ${isCorrect ? '#28a745' : '#dc3545'};">Sua resposta:</strong> 
+                            ${String.fromCharCode(65 + (userAnswer || 0))} - ${userAnswerText}
+                        </div>
+                        ${!isCorrect ? `
+                            <div style="margin-bottom: 0.5rem;">
+                                <strong style="color: #28a745;">Resposta correta:</strong> 
+                                ${String.fromCharCode(65 + question.correct)} - ${correctAnswerText}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div style="background: var(--bg-tertiary); padding: 1rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                        <strong>Explicação:</strong> ${question.explanation}
+                    </div>
+                `;
+                
+                reviewList.appendChild(reviewItem);
+            });
+        }
+
+        // Reiniciar simulado
+        restartBtn.addEventListener('click', function() {
+            resultsArea.style.display = 'none';
+            document.querySelector('.simulado-info').style.display = 'block';
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            simuladoStarted = false;
+        });
+
+        // Funcionalidade do modo escuro
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Verificar tema salvo
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        // Toggle do tema
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>

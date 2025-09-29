@@ -47,6 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
+            
+            // Skip external links
+            if (targetId.includes('.html')) {
+                window.location.href = targetId;
+                return;
+            }
+            
             const targetSection = document.querySelector(targetId);
             
             if (targetSection) {
@@ -145,7 +152,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Check for saved theme preference or default to light mode
         const currentTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        }
         
         // Update icon based on current theme
         updateThemeIcon(currentTheme);
@@ -162,10 +171,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Theme toggle event listener
         themeToggle.addEventListener('click', function() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const currentTheme = document.body.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
-            document.documentElement.setAttribute('data-theme', newTheme);
+            if (newTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+            } else {
+                document.body.removeAttribute('data-theme');
+            }
+            
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
             
@@ -280,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 question: "Quantas espécies de cordados são conhecidas atualmente?",
                 options: ["42.500 espécies", "46.200 espécies", "50.000 espécies", "38.900 espécies"],
                 correct: 1,
-                explanation: "O Filo Chordata possui 46.200 espécies conhecidas, distribuídas em três subfilos principais: Urochordata (3.710), Cephalochordata (~30) e Vertebrata (~42.500). Estes animais são deuterostômios com simetria bilateral e tubo digestório completo.",
+                explanation: "O Filo Chordata possui 46.200 espécies conhecidas, distribuídas em três subfilos principais.",
                 link: "#chordata"
             },
             {
@@ -293,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     "Simetria bilateral, celoma, metameria, deuterostomia"
                 ],
                 correct: 0,
-                explanation: "As quatro características diagnósticas são: 1) Notocorda (bastão esquelético dorsal elástico), 2) Tubo neural oco (sistema nervoso dorsal à notocorda), 3) Fendas faríngeas (perfurações faringe-exterior), 4) Cauda pós-anal (estrutura com função natatória). Estas características podem estar presentes apenas em estágios larvais em alguns grupos.",
+                explanation: "As quatro características diagnósticas são fundamentais para definir os cordados.",
                 link: "#chordata"
             },
             {
@@ -301,47 +315,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 question: "Quando os tunicados apresentam as características típicas de cordados?",
                 options: ["Durante toda a vida", "Apenas na fase larval", "Apenas no adulto", "Varia entre as classes"],
                 correct: 1,
-                explanation: "Os tunicados (Urochordata) são únicos entre os cordados por apresentarem notocorda, tubo neural oco e cauda pós-anal APENAS nos estágios larvais. No adulto, desenvolvem uma túnica de tunicina e assumem formas sésseis (ascídias) ou planctônicas (salpas), perdendo a maioria das características de cordado.",
+                explanation: "Os tunicados apresentam características de cordados apenas nos estágios larvais.",
                 link: "#urochordata"
             },
             {
                 category: "Cephalochordata",
-                question: "O que torna os anfioxos especiais entre os cordados não-vertebrados?",
-                options: [
-                    "São os únicos marinhos",
-                    "Mantêm características de cordado no adulto",
-                    "Possuem esqueleto cartilaginoso",
-                    "Têm o maior número de espécies"
-                ],
-                correct: 1,
-                explanation: "Os anfioxos (Cephalochordata) são únicos por manterem todas as quatro características de cordado no adulto: notocorda, tubo neural oco, 200 fendas faríngeas e cauda pós-anal. Com apenas ~30 espécies (2 no Brasil), são considerados o grupo irmão dos vertebrados e fundamentais para entender a evolução dos cordados.",
+                question: "Quantas fendas faríngeas possuem os anfioxos?",
+                options: ["50 fendas", "100 fendas", "200 fendas", "300 fendas"],
+                correct: 2,
+                explanation: "Os anfioxos possuem 200 fendas faríngeas verticais oblíquas.",
                 link: "#cephalochordata"
             },
             {
                 category: "Agnatha",
-                question: "Por que a classe Agnatha é considerada primitiva entre os vertebrados?",
-                options: [
-                    "Não possuem esqueleto",
-                    "Ausência de mandíbulas e nadadeiras pares verdadeiras",
-                    "Vivem apenas em água doce",
-                    "Não possuem sistema nervoso"
-                ],
+                question: "Quantas câmaras branquiais possuem as lampréias?",
+                options: ["5 pares", "7 pares", "10 pares", "15 pares"],
                 correct: 1,
-                explanation: "Agnatha ('sem mandíbulas') representa o estágio mais primitivo dos vertebrados. Possuem esqueleto cartilaginoso, câmaras branquiais saculiformes, órgão olfatório ímpar e fecundação externa. A ausência de mandíbulas e nadadeiras pares verdadeiras os diferencia dos Gnathostoma, representando uma etapa evolutiva anterior à revolução das mandíbulas.",
+                explanation: "As lampréias possuem 7 pares de câmaras branquiais.",
                 link: "#agnatha"
-            },
-            {
-                category: "Evolução",
-                question: "Qual foi a principal vantagem evolutiva do desenvolvimento das mandíbulas nos Gnathostoma?",
-                options: [
-                    "Apenas melhor respiração",
-                    "Somente proteção contra predadores",
-                    "Múltiplas funções: captura de presas, manipulação, cuidado parental",
-                    "Apenas melhoria na natação"
-                ],
-                correct: 2,
-                explanation: "O desenvolvimento das mandíbulas (a partir do arco visceral mandibular) revolucionou os vertebrados, permitindo: capturar e mastigar presas, manipular objetos, cavar buracos, carregar materiais para construção de ninhos, segurar parceiros durante corte e segurar juvenis durante cuidado parental. Esta inovação, junto com nadadeiras pares verdadeiras, proporcionou maior agilidade e controle de movimentos.",
-                link: "#gnathostoma"
             }
         ],
         intermediario: [
@@ -355,21 +346,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     "Pelo número de nadadeiras"
                 ],
                 correct: 1,
-                explanation: "Holocephali (50 espécies) possui cabeça íntegra, 4 fendas + 1 abertura com opérculo, placas dentígeras e são ovíparos bentônicos. Elasmobranchii (910 espécies) tem cabeça separada do corpo, 5-7 fendas branquiais externas, dentes tricúspides trocados a cada 7-8 dias, e reprodução variada (ovíparos, ovovivíparos ou vivíparos).",
+                explanation: "Holocephali possui cabeça íntegra, Elasmobranchii tem cabeça separada do corpo.",
                 link: "#chondrichthyes"
-            },
-            {
-                category: "Transição Evolutiva",
-                question: "Qual teoria explica a transição dos vertebrados da água para a terra no Devoniano?",
-                options: [
-                    "Teoria da Competição Aquática",
-                    "Teoria da Passagem Terrestre",
-                    "Teoria da Pressão Predatória",
-                    "Teoria da Deriva Continental"
-                ],
-                correct: 1,
-                explanation: "A Teoria da Passagem Terrestre explica que no Período Devoniano, estações sazonais marcantes causavam secagem de lagos rasos, forçando peixes a estivar ou rastejar entre corpos d'água. O ambiente terrestre estava livre de predadores e competidores, e águas rasas com pouco oxigênio favoreceram o desenvolvimento de pulmões, levando às adaptações: nadadeiras→patas, pescoço diferenciado, coluna resistente e pele cornificada.",
-                link: "#transicao"
             },
             {
                 category: "Amphibia",
@@ -381,40 +359,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     "Apenas pelo tipo de reprodução"
                 ],
                 correct: 1,
-                explanation: "Sapos: porte grande, pernas curtas, saltos curtos, habitat terrestre. Rãs: porte menor, pernas longas, saltos longos, habitat aquático/terrestre. Pererecas: porte menor, pernas longas + discos adesivos, saltos longos, habitat arborícola. Todas pertencem à ordem Anura (3.750 espécies) e compartilham características como ausência de cauda no adulto e metamorfose completa.",
+                explanation: "Sapos: porte grande, pernas curtas. Rãs: pernas longas. Pererecas: discos adesivos.",
                 link: "#amphibia"
-            },
-            {
-                category: "Reptilia",
-                question: "Qual a importância evolutiva do ovo amniótico (cleidóico) dos répteis?",
-                options: [
-                    "Apenas proteção contra predadores",
-                    "Somente aumento do tamanho do embrião",
-                    "Independência total da água para reprodução",
-                    "Apenas melhoria na nutrição"
-                ],
-                correct: 2,
-                explanation: "O ovo amniótico revolucionou a reprodução dos vertebrados terrestres com: Casca (proteção mecânica + troca gasosa), Alantóide (respiração + armazenamento de excretas), Córion (envolve embrião e vitelo), Âmnion (espaço com líquido criando ambiente aquático), Vitelo (suprimento alimentar). Esta inovação permitiu reprodução completamente independente da água, conquistando definitivamente o ambiente terrestre.",
-                link: "#reptilia"
-            },
-            {
-                category: "Aves",
-                question: "Quais são as duas principais teorias para a origem do voo nas aves?",
-                options: [
-                    "Teoria Aquática e Teoria Terrestre",
-                    "Teoria Arborícola e Teoria Terrestre",
-                    "Teoria Planadora e Teoria Saltadora",
-                    "Teoria Predatória e Teoria Migratória"
-                ],
-                correct: 1,
-                explanation: "Teoria Arborícola: trepador → planador → voador (saltava entre árvores, desenvolveu planagem). Teoria Terrestre: corredor → voador (usava asas para capturar insetos no solo). Ambas explicam como ancestrais desenvolveram estruturas especializadas como rêmiges, rectrizes, álula, quilha do esterno, sinsacro e pigóstilo para o voo eficiente.",
-                link: "#aves"
             }
         ],
         avancado: [
             {
-                category: "Características Diagnósticas",
-                question: "Quais características esqueléticas distinguem os mamíferos de outros vertebrados?",
+                category: "Mammalia",
+                question: "Quais características esqueléticas distinguem os mamíferos?",
                 options: [
                     "Apenas presença de ossos",
                     "Um osso mandibular, três ossículos do ouvido médio, pavilhão auditivo",
@@ -422,60 +374,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     "Apenas articulações móveis"
                 ],
                 correct: 1,
-                explanation: "Os mamíferos possuem características esqueléticas únicas: um osso mandibular (dentário) com redução dos demais ossos da mandíbula, três ossículos do ouvido médio (estribo, bigorna, martelo), pavilhão auditivo externo, articulação dentário-escamosal e palato secundário separando cavidades oral e nasal. Estas adaptações melhoraram audição, mastigação e respiração.",
+                explanation: "Os mamíferos possuem características esqueléticas únicas.",
                 link: "#mammalia"
-            },
-            {
-                category: "Tipos de Pêlos",
-                question: "Como se diferenciam funcionalmente os tipos de pêlos nos mamíferos?",
-                options: [
-                    "Todos têm a mesma função",
-                    "Cobertura (aparência), lanosos (isolamento), vibrissas (tato), espinhos (proteção)",
-                    "Apenas diferem na cor",
-                    "Somente variam no comprimento"
-                ],
-                correct: 1,
-                explanation: "Os pêlos mamíferos são altamente especializados: Cobertura (guard hairs) - longos e retos para cor/textura; Lanosos (viliformes) - curtos e achatados para isolamento térmico; Vibrissas - grossos e inervados como órgãos táteis especializados; Espinhos - rígidos para proteção; Cílios/Crinas - longos para proteção ocular e display. Esta diversificação permitiu adaptação a múltiplos ambientes.",
-                link: "#mammalia"
-            },
-            {
-                category: "Desenvolvimento Reprodutivo",
-                question: "Como se diferenciam os três grupos de mamíferos quanto ao desenvolvimento embrionário?",
-                options: [
-                    "Todos desenvolvem da mesma forma",
-                    "Monotremados (ovíparos), Marsupiais (gestação curta + marsúpio), Eutérios (placenta complexa)",
-                    "Apenas diferem no tamanho dos filhotes",
-                    "Somente variam no tempo de gestação"
-                ],
-                correct: 1,
-                explanation: "Prototheria (6 espécies): ovíparos, desenvolvimento externo, sem mamilos (poros), sem placenta. Metatheria (250 espécies): vivíparos, gestação curta, desenvolvimento no marsúpio, placenta corioalantóide simples. Eutheria (3.800 espécies): vivíparos, gestação longa, desenvolvimento intrauterino completo, placenta corioalantóide complexa. Esta diversificação reprodutiva permitiu colonização de diferentes nichos ecológicos.",
-                link: "#mammalia"
-            },
-            {
-                category: "Ecolocalização",
-                question: "Como funciona a ecolocalização em mamíferos e quais grupos a utilizam?",
-                options: [
-                    "Apenas morcegos, usando visão",
-                    "Quirópteros (morcegos) e cetáceos, emitindo ultrassons e interpretando ecos",
-                    "Todos os mamíferos, usando olfato",
-                    "Apenas cetáceos, usando vibrações"
-                ],
-                correct: 1,
-                explanation: "A ecolocalização é a emissão e interpretação de ecos ultrassônicos para navegação e caça. Quirópteros (morcegos) possuem o sistema mais sofisticado com frequências de 20-200 kHz. Cetáceos (golfinhos e baleias dentadas) usam melão e mandíbula especializados. O mecanismo envolve ondas sonoras de alta frequência + interpretação temporal dos ecos, permitindo caça noturna, navegação em águas turvas e detecção precisa de presas.",
-                link: "#mammalia"
-            },
-            {
-                category: "Composição das Penas",
-                question: "Qual é a composição química detalhada das penas das aves?",
-                options: [
-                    "100% queratina",
-                    "90% beta-queratina, 8% água, 1% lipídios, 1% outras proteínas/pigmentos",
-                    "80% proteína, 20% água",
-                    "95% colágeno, 5% outros"
-                ],
-                correct: 1,
-                explanation: "As penas possuem composição específica: 90% beta-queratina (proteína estrutural única), 8% água, 1% lipídios e 1% outras proteínas e pigmentos. A coloração resulta de: pigmentos (amarelo, laranja, marrom, preto), microestrutura (branco) e combinação (azul, verde, iridescência). Esta composição confere leveza, resistência e propriedades aerodinâmicas essenciais para o voo.",
-                link: "#aves"
             }
         ]
     };
@@ -522,43 +422,47 @@ document.addEventListener('DOMContentLoaded', function() {
         score = 0;
         userAnswers = [];
         
-        quizStart.style.display = 'none';
-        quizQuestion.style.display = 'block';
+        if (quizStart) quizStart.style.display = 'none';
+        if (quizQuestion) quizQuestion.style.display = 'block';
         
         showQuestion();
     }
 
     function showQuestion() {
+        if (!currentQuiz[currentQuestion]) return;
+        
         const question = currentQuiz[currentQuestion];
         
         // Update progress
         const progress = ((currentQuestion + 1) / currentQuiz.length) * 100;
-        progressFill.style.width = progress + '%';
-        progressText.textContent = `Questão ${currentQuestion + 1} de ${currentQuiz.length}`;
+        if (progressFill) progressFill.style.width = progress + '%';
+        if (progressText) progressText.textContent = `Questão ${currentQuestion + 1} de ${currentQuiz.length}`;
         
         // Update question content
-        questionCategory.textContent = question.category;
-        questionNumber.textContent = currentQuestion + 1;
-        questionText.textContent = question.question;
+        if (questionCategory) questionCategory.textContent = question.category;
+        if (questionNumber) questionNumber.textContent = currentQuestion + 1;
+        if (questionText) questionText.textContent = question.question;
         
         // Update answer options
-        answerOptions.innerHTML = '';
-        question.options.forEach((option, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'answer-btn';
-            btn.dataset.answer = index;
-            btn.innerHTML = `
-                <span class="answer-letter">${String.fromCharCode(65 + index)}</span>
-                <span class="answer-text">${option}</span>
-            `;
-            btn.addEventListener('click', selectAnswer);
-            answerOptions.appendChild(btn);
-        });
+        if (answerOptions) {
+            answerOptions.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'answer-btn';
+                btn.dataset.answer = index;
+                btn.innerHTML = `
+                    <span class="answer-letter">${String.fromCharCode(65 + index)}</span>
+                    <span class="answer-text">${option}</span>
+                `;
+                btn.addEventListener('click', selectAnswer);
+                answerOptions.appendChild(btn);
+            });
+        }
         
         // Reset feedback and controls
-        questionFeedback.style.display = 'none';
-        prevBtn.style.display = currentQuestion > 0 ? 'block' : 'none';
-        nextBtn.style.display = 'none';
+        if (questionFeedback) questionFeedback.style.display = 'none';
+        if (prevBtn) prevBtn.style.display = currentQuestion > 0 ? 'block' : 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
     }
 
     function selectAnswer(e) {
@@ -592,27 +496,31 @@ document.addEventListener('DOMContentLoaded', function() {
         showFeedback(isCorrect, question);
         
         // Show next button
-        nextBtn.style.display = 'block';
-        nextBtn.innerHTML = currentQuestion === currentQuiz.length - 1 ? 
-            'Ver Resultados <i class="fas fa-chart-bar"></i>' : 
-            'Próxima <i class="fas fa-arrow-right"></i>';
+        if (nextBtn) {
+            nextBtn.style.display = 'block';
+            nextBtn.innerHTML = currentQuestion === currentQuiz.length - 1 ? 
+                'Ver Resultados <i class="fas fa-chart-bar"></i>' : 
+                'Próxima <i class="fas fa-arrow-right"></i>';
+        }
     }
 
     function showFeedback(isCorrect, question) {
-        feedbackIcon.innerHTML = isCorrect ? 
-            '<i class="fas fa-check-circle"></i>' : 
-            '<i class="fas fa-times-circle"></i>';
-        feedbackIcon.className = isCorrect ? 'feedback-icon correct' : 'feedback-icon incorrect';
+        if (feedbackIcon) {
+            feedbackIcon.innerHTML = isCorrect ? 
+                '<i class="fas fa-check-circle"></i>' : 
+                '<i class="fas fa-times-circle"></i>';
+            feedbackIcon.className = isCorrect ? 'feedback-icon correct' : 'feedback-icon incorrect';
+        }
         
-        feedbackTitle.textContent = isCorrect ? 'Correto!' : 'Incorreto!';
-        feedbackExplanation.textContent = question.explanation;
+        if (feedbackTitle) feedbackTitle.textContent = isCorrect ? 'Correto!' : 'Incorreto!';
+        if (feedbackExplanation) feedbackExplanation.textContent = question.explanation;
         
-        const feedbackLink = questionFeedback.querySelector('.feedback-link');
+        const feedbackLink = questionFeedback?.querySelector('.feedback-link');
         if (feedbackLink) {
             feedbackLink.href = question.link;
         }
         
-        questionFeedback.style.display = 'block';
+        if (questionFeedback) questionFeedback.style.display = 'block';
     }
 
     // Navigation
@@ -637,108 +545,41 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showResults() {
-        quizQuestion.style.display = 'none';
-        quizResults.style.display = 'block';
+        if (quizQuestion) quizQuestion.style.display = 'none';
+        if (quizResults) quizResults.style.display = 'block';
         
         const percentage = Math.round((score / currentQuiz.length) * 100);
         const grade = getGrade(percentage);
         
-        document.getElementById('finalScore').textContent = score;
-        document.getElementById('finalPercentage').textContent = percentage + '%';
-        document.getElementById('finalGrade').textContent = grade;
+        const finalScore = document.getElementById('finalScore');
+        const finalPercentage = document.getElementById('finalPercentage');
+        const finalGrade = document.getElementById('finalGrade');
+        
+        if (finalScore) finalScore.textContent = score;
+        if (finalPercentage) finalPercentage.textContent = percentage + '%';
+        if (finalGrade) finalGrade.textContent = grade;
         
         // Update results icon and title based on performance
         const resultsIcon = document.getElementById('resultsIcon');
         const resultsTitle = document.getElementById('resultsTitle');
         const resultsSubtitle = document.getElementById('resultsSubtitle');
         
-        if (percentage === 100) {
-            resultsIcon.innerHTML = '<i class="fas fa-crown"></i>';
-            resultsTitle.textContent = 'PERFEITO! 🎉';
-            resultsSubtitle.textContent = 'Parabéns! Você ganhou o Prêmio Especial!';
-            
-            // Add special perfect score message
-            showPerfectScoreMessage();
-        } else if (percentage >= 80) {
-            resultsIcon.innerHTML = '<i class="fas fa-trophy"></i>';
-            resultsTitle.textContent = 'Excelente!';
-            resultsSubtitle.textContent = 'Você completou o questionário';
-            resultsIcon.innerHTML = '<i class="fas fa-medal"></i>';
-            resultsTitle.textContent = 'Bom trabalho!';
-            resultsSubtitle.textContent = 'Você completou o questionário';
+        if (percentage >= 80) {
+            if (resultsIcon) resultsIcon.innerHTML = '<i class="fas fa-trophy"></i>';
+            if (resultsTitle) resultsTitle.textContent = 'Excelente!';
+            if (resultsSubtitle) resultsSubtitle.textContent = 'Você completou o questionário';
+        } else if (percentage >= 60) {
+            if (resultsIcon) resultsIcon.innerHTML = '<i class="fas fa-medal"></i>';
+            if (resultsTitle) resultsTitle.textContent = 'Bom trabalho!';
+            if (resultsSubtitle) resultsSubtitle.textContent = 'Você completou o questionário';
         } else {
-            resultsIcon.innerHTML = '<i class="fas fa-book"></i>';
-            resultsTitle.textContent = 'Continue estudando!';
-            resultsSubtitle.textContent = 'Você completou o questionário';
+            if (resultsIcon) resultsIcon.innerHTML = '<i class="fas fa-book"></i>';
+            if (resultsTitle) resultsTitle.textContent = 'Continue estudando!';
+            if (resultsSubtitle) resultsSubtitle.textContent = 'Você completou o questionário';
         }
         
         // Calculate topic breakdown
         updateTopicBreakdown();
-    }
-
-    function showPerfectScoreMessage() {
-        // Define prizes for each level
-        const prizes = {
-            basico: {
-                title: "🥉 NÍVEL BÁSICO DOMINADO! 🥉",
-                description: "Você sabe mucho sobre os conceitos fundamentais!",
-                prize: "UM SORVETE DA MILKY MOO!!!",
-                icon: "fas fa-medal",
-                color: "#cd7f32" // Bronze
-            },
-            intermediario: {
-                title: "🥈 NÍVEL INTERMEDIÁRIO CONQUISTADO! 🥈",
-                description: "Você sabe mucho sobre os processos evolutivos e classificações!",
-                prize: "UM JANTAR EM QUALQUER RESTAURANTE DA SUA ESCOLHA!!!",
-                icon: "fas fa-trophy",
-                color: "#c0c0c0" // Silver
-            },
-            avancado: {
-                title: "🥇 NÍVEL AVANÇADO PERFEITO! 🥇",
-                description: "Simplesmente a mulher mais incrível e perfeita desse mundão!!!!!",
-                prize: "UM VESTIDO (OU OUTRO MIMO) DA SUA ESCOLHA!!!",
-                icon: "fas fa-crown",
-                color: "#ffd700" // Gold
-            }
-        };
-
-        const currentPrize = prizes[selectedLevel];
-        
-        // Create special message for perfect score
-        const resultsCard = document.querySelector('.results-card');
-        const specialMessage = document.createElement('div');
-        specialMessage.className = 'perfect-score-message';
-        specialMessage.style.background = `linear-gradient(135deg, ${currentPrize.color} 0%, ${currentPrize.color}88 100%)`;
-        
-        specialMessage.innerHTML = `
-            <div class="perfect-message-content">
-                <div class="perfect-icon">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h3>${currentPrize.title}</h3>
-                <p>${currentPrize.description}</p>
-                <div class="prize-box">
-                    <div class="prize-icon">
-                        <i class="${currentPrize.icon}"></i>
-                    </div>
-                    <div class="prize-text">
-                        <h4>Você ganhou:</h4>
-                        <p class="prize-description">${currentPrize.prize}</p>
-                    </div>
-                </div>
-                <div class="level-achievement">
-                    <p><strong>Nível:</strong> ${selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)}</p>
-                    <p><strong>Questões:</strong> ${currentQuiz.length} questões</p>
-                    <p><strong>Precisão:</strong> 100% - Perfeito!</p>
-                </div>
-            </div>
-        `;
-        
-        // Insert after results header
-        const resultsHeader = resultsCard.querySelector('.results-header');
-        resultsHeader.insertAdjacentElement('afterend', specialMessage);
     }
 
     function getGrade(percentage) {
@@ -786,8 +627,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Restart quiz
     if (restartBtn) {
         restartBtn.addEventListener('click', function() {
-            quizResults.style.display = 'none';
-            quizStart.style.display = 'block';
+            if (quizResults) quizResults.style.display = 'none';
+            if (quizStart) quizStart.style.display = 'block';
         });
     }
 
